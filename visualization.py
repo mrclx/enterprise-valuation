@@ -9,6 +9,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+import matplotlib.colors as colors
 
 def input_df():
     
@@ -88,3 +89,48 @@ def hparams_loss_plot():
     plt.margins(0.02)
     
     plt.savefig("./plt/hparams_loss_normed_unnormed.png")
+    
+def hparams_dimensions_plot():
+    
+    # seaborn settings.
+    sns.set()
+    
+    # import data from hparams_log.csv.
+    data = pd.read_csv("./logs/hparams_log.csv", index_col = 0)
+    data = data[["num_layers", "num_nodes", "avg_loss"]]
+    
+    # star where dimensions of model with minimal loss is located.
+    x = data[data["avg_loss"] == data["avg_loss"].min()]["num_nodes"]
+    y = data.loc[data["avg_loss"] == data["avg_loss"].min()]["num_layers"]
+    plt.plot(x, y, marker = "*", markersize = 15, markerfacecolor = "blue")
+    
+    # make position more realizeable.
+    plt.annotate("optimal model", xy = (15, 1.1),
+                 xytext = (100, 2), arrowprops = {"color": "blue"})
+    
+    # transform data for contourf.
+    data = data.pivot_table(index = "num_layers",
+                            columns = "num_nodes",
+                            values = "avg_loss",
+                            aggfunc="min",
+                            fill_value = 30
+                            )
+    
+    # create meshgrid. x-axis: num_nodes. y_axis = num_layers.
+    u = np.array(data.columns)
+    v = np.array(data.index)
+    X, Y = np.meshgrid(u, v)
+    
+    # color: avg_loss
+    Z = np.array(data)
+    
+    plt.contourf(X, Y, Z, 50, cmap = "afmhot")
+    
+    plt.xlabel("number of nodes per layer")
+    plt.ylabel("number of layers")
+    plt.colorbar(label = "average loss")
+    plt.margins(0.02)
+    
+    plt.savefig("./plt/hparams_dimensions.png")
+    
+    
