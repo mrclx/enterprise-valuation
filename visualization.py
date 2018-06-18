@@ -98,12 +98,12 @@ def hparams_dimensions_plot():
     data = pd.read_csv("./logs/hparams_log.csv", index_col = 0)
     data = data[["num_layers", "num_nodes", "avg_loss"]]
     
-    # star where dimensions of model with minimal loss is located.
+    # star where dimensions of model with minimal loss are located.
     x = data[data["avg_loss"] == data["avg_loss"].min()]["num_nodes"]
     y = data.loc[data["avg_loss"] == data["avg_loss"].min()]["num_layers"]
     plt.plot(x, y, marker = "*", markersize = 15, markerfacecolor = "blue")
     
-    # make position more realizeable.
+    # make position more recognizable.
     plt.annotate("optimal model", xy = (15, 1.1),
                  xytext = (100, 2), arrowprops = {"color": "blue"})
     
@@ -115,12 +115,12 @@ def hparams_dimensions_plot():
                             fill_value = 30
                             )
     
-    # create meshgrid. x-axis: num_nodes. y_axis = num_layers.
+    # create meshgrid. x-axis: num_nodes. y-axis = num_layers.
     u = np.array(data.columns)
     v = np.array(data.index)
     X, Y = np.meshgrid(u, v)
     
-    # color: avg_loss
+    # color: avg_loss.
     Z = np.array(data)
     
     plt.contourf(X, Y, Z, 50, cmap = "afmhot")
