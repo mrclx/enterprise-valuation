@@ -26,7 +26,7 @@ Hparams_log = pd.DataFrame(columns = ["learing_rate",
                                       "loss",
                                       "avg_loss"])
 
-# MODEL_DIR = "xxx"
+MODEL_DIR = "C:/Users/mrclx/Google Drive/TWE/6. Semester/Informations- und Kommunikationstechnik/IT 3 - Artificial Intelligence/Prognosemodell/code"
 
 def input_set(features, labels):
     
@@ -279,11 +279,13 @@ def predict_valuation(predict_x):
             tf.data.Dataset.from_tensor_slices(predict_x).batch(len(predict_x)))
         
     # print estimated enterprise value.
-    template = ('\nValuation is ${0:.2f}!')
+    template = ('\nValuation is ${0:.2f}.')
         
     for pred in predictions:
         valuation = 1.041918e+11 * pred["predictions"][0] + 6.899872e+10
         print(template.format(valuation))
+        
+        return valuation
         
 def test_prediction():
             
@@ -296,3 +298,54 @@ def test_prediction():
     print(data)
 
     predict_valuation(data)
+    
+def demo_prediction():
+    """Demo with data about Airbus SE. Date: 15-06-18."""
+    
+    features = ["dividendyield", "earningsyield", "evtoebit",
+                "evtoebitda", "evtofcff", "evtoinvestedcapital", "evtonopat",
+                "evtoof", "pricetoearnings", "ebitdagrowth", "freecashflow",
+                "revenuegrowth"]
+    
+    # metrics about EADSY. Date: 15-06-18.
+    EADSY = np.array([[0.01654], [0.03214], [16.76], [11.16], [43.52], [5.72],
+                       [36.41], [19.61], [31.11], [0.9364], [2.1e+9], [0.028]])
+    
+    print(EADSY)
+    
+    # mean and std to compute z-score.
+    features_mean = np.array([[2.028145e-02], [5.066418e-02], [2.763982e+01],
+                              [1.498835e+01], [9.076441e+01], [9.516009e+00],
+                              [4.756403e+01], [0.0], [4.888499e+01],
+                              [3.240874e-01], [2.601085e+09], [9.792685e-02]])
+    features_std = np.array([[2.150512e-02], [4.071772e-02], [5.808228e+01],
+                             [9.666688e+00], [2.488084e+02], [5.323648e+01],
+                             [1.388038e+02], [19.61], [1.637779e+02],
+                             [2.453869e+00], [4.715736e+09], [1.463448e-01]])
+    
+    # normalization.
+    EADSY_normed = (EADSY - features_mean) / features_std
+    
+    # build dict.
+    EADSY_dict = {k: EADSY_normed[features.index(k)] for k in features}
+    print(EADSY_dict)
+    
+    # EADSY market cap. Date: 15-06-18.
+    EADSY_marketcap_150618 = 77600000000
+    
+    ev = predict_valuation(EADSY_dict)
+    
+    print("Airbus SE Market Cap (15-06-18): ${0:.2f}.".format(EADSY_marketcap_150618))
+        
+    # Infer recommendation. If market cap is higher than valuation: sell. Else: buy.
+    if EADSY_marketcap_150618 >= ev:
+        print()
+        print("SELL!!!")
+        print()
+        
+    else:
+        print()
+        print("BUY!!!")
+        print()
+    
+    
