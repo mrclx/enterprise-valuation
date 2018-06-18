@@ -26,7 +26,7 @@ Hparams_log = pd.DataFrame(columns = ["learing_rate",
                                       "loss",
                                       "avg_loss"])
 
-MODEL_DIR = "C:/Users/mrclx/Google Drive/TWE/6. Semester/Informations- und Kommunikationstechnik/IT 3 - Artificial Intelligence/Prognosemodell/code"
+MODEL_DIR = "xxx"
 
 def input_set(features, labels):
     
