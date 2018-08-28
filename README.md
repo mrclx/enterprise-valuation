@@ -1,5 +1,5 @@
 # enterprise-valuation
-This project is a neural network to compute enterprise valuations. It was executed in course of the information and communcation technology lecture 2018 at the Baden-Wuerttemberg Cooperative State University Ravensburg.
+Project goal was to develop neural network that predicts enterprise valuations. The project was executed in course of the information and communcation technology lecture 2018 at the Baden-Wuerttemberg Cooperative State University Ravensburg.
 
 The file "19062018-IKT-KI_Banking.pdf" contains a PowerPoint Presentation on the project.
 
